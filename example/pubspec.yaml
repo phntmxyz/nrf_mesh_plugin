@@ -16,10 +16,10 @@ dependencies:
   flutter_reactive_ble: ^5.0.2
   permission_handler: ^11.3.1
   device_info_plus: ^10.1.2
-  nordic_nrf_mesh: ^0.13.0
+  nordic_nrf_mesh:
+    path: ../
   provider: ^6.1.2
   flutter_colorpicker: ^1.1.0
-#  nordic_nrf_mesh_faradine: ^0.13.4
 
 dev_dependencies:
   flutter_test:
