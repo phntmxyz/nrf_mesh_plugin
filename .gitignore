@@ -10,3 +10,5 @@ example/android/app/google-services.json
 *.iml
 
 /.idea/
+
+/.vscode/settings.json
