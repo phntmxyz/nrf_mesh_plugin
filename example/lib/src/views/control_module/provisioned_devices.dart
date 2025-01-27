@@ -4,20 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 import 'package:nordic_nrf_mesh_example/src/app.dart';
+import 'package:nordic_nrf_mesh_example/src/mesh_manager_provider.dart';
 import 'package:nordic_nrf_mesh_example/src/views/control_module/module.dart';
 import 'package:nordic_nrf_mesh_example/src/widgets/device.dart';
+import 'package:provider/provider.dart';
 
 class ProvisionedDevices extends StatefulWidget {
-  final NordicNrfMesh nordicNrfMesh;
-
-  const ProvisionedDevices({Key? key, required this.nordicNrfMesh}) : super(key: key);
+  const ProvisionedDevices({Key? key}) : super(key: key);
 
   @override
   State<ProvisionedDevices> createState() => _ProvisionedDevicesState();
 }
 
 class _ProvisionedDevicesState extends State<ProvisionedDevices> {
-  late MeshManagerApi _meshManagerApi;
   final _devices = <DiscoveredDevice>{};
   bool isScanning = false;
   StreamSubscription<DiscoveredDevice>? _scanSubscription;
@@ -27,8 +26,7 @@ class _ProvisionedDevicesState extends State<ProvisionedDevices> {
   @override
   void initState() {
     super.initState();
-    _meshManagerApi = widget.nordicNrfMesh.meshManagerApi;
-    _scanProvisionned();
+    _scanProvisionned(context);
   }
 
   @override
@@ -71,22 +69,22 @@ class _ProvisionedDevicesState extends State<ProvisionedDevices> {
           Expanded(
             child: Module(
                 device: _device!,
-                meshManagerApi: _meshManagerApi,
                 onDisconnect: () {
                   _device = null;
-                  _scanProvisionned();
+                  _scanProvisionned(context);
                 }),
           ),
       ],
     );
   }
 
-  Future<void> _scanProvisionned() async {
+  Future<void> _scanProvisionned(BuildContext context) async {
+    final nordicNrfMesh = context.read<MeshManagerNotifier>().mesh;
     setState(() {
       _devices.clear();
     });
     await checkAndAskPermissions();
-    _scanSubscription = widget.nordicNrfMesh.scanForProxy().listen((device) async {
+    _scanSubscription = nordicNrfMesh.scanForProxy().listen((device) async {
       if (_devices.every((d) => d.id != device.id)) {
         setState(() {
           _devices.add(device);

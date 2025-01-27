@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 
-class SendGenericLevel extends StatefulWidget {
+class SendLightnessLevel extends StatefulWidget {
   final MeshManagerApi meshManagerApi;
 
-  const SendGenericLevel({Key? key, required this.meshManagerApi}) : super(key: key);
+  const SendLightnessLevel({super.key, required this.meshManagerApi});
 
   @override
-  State<SendGenericLevel> createState() => _SendGenericLevelState();
+  State<SendLightnessLevel> createState() => _SendLightnessLevelState();
 }
 
-class _SendGenericLevelState extends State<SendGenericLevel> {
+class _SendLightnessLevelState extends State<SendLightnessLevel> {
   int? selectedElementAddress = 0xffff;
 
   int? selectedLevel;
@@ -21,19 +21,19 @@ class _SendGenericLevelState extends State<SendGenericLevel> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      key: const ValueKey('module-send-generic-level-form'),
-      title: const Text('Send a generic level set'),
+      key: const ValueKey('module-send-generic-lightness-form'),
+      title: const Text('Send a generic lightness set'),
       children: <Widget>[
         TextField(
-          key: const ValueKey('module-send-generic-level-address'),
+          key: const ValueKey('module-send-generic-lightness-address'),
           decoration: const InputDecoration(hintText: 'Element Address'),
           onChanged: (text) {
             selectedElementAddress = int.tryParse(text);
           },
         ),
         TextField(
-          key: const ValueKey('module-send-generic-level-value'),
-          decoration: const InputDecoration(hintText: 'Level Value'),
+          key: const ValueKey('module-send-generic-lightness-value'),
+          decoration: const InputDecoration(hintText: 'Lightness Value'),
           onChanged: (text) {
             setState(() {
               selectedLevel = int.tryParse(text);
@@ -47,7 +47,7 @@ class _SendGenericLevelState extends State<SendGenericLevel> {
                   debugPrint('send level $selectedLevel to $selectedElementAddress');
                   try {
                     await widget.meshManagerApi
-                        .sendGenericLevelSet(selectedElementAddress!, selectedLevel!)
+                        .sendLightLightness(selectedElementAddress!, selectedLevel!, 0)
                         .timeout(const Duration(seconds: 40));
                     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('OK')));
                   } on TimeoutException catch (_) {

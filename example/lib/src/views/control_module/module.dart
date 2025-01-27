@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
+import 'package:nordic_nrf_mesh_example/src/mesh_manager_provider.dart';
 import 'package:nordic_nrf_mesh_example/src/views/control_module/commands/send_config_model_publication_add.dart';
+import 'package:nordic_nrf_mesh_example/src/views/control_module/commands/send_hsl.dart';
+import 'package:nordic_nrf_mesh_example/src/views/control_module/commands/send_lightness_level.dart';
+import 'package:provider/provider.dart';
 
 import 'commands/send_deprovisioning.dart';
 import 'commands/send_generic_on_off.dart';
@@ -13,13 +17,11 @@ import 'node.dart';
 
 class Module extends StatefulWidget {
   final DiscoveredDevice device;
-  final MeshManagerApi meshManagerApi;
   final VoidCallback onDisconnect;
 
   const Module({
     Key? key,
     required this.device,
-    required this.meshManagerApi,
     required this.onDisconnect,
   }) : super(key: key);
 
@@ -31,7 +33,7 @@ class _ModuleState extends State<Module> {
   final bleMeshManager = BleMeshManager();
 
   bool isLoading = true;
-  late List<ProvisionedMeshNode> nodes;
+  List<ProvisionedMeshNode> nodes = [];
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _ModuleState extends State<Module> {
 
   @override
   Widget build(BuildContext context) {
+    final meshManagerApi = context.read<MeshManagerNotifier>().mesh.meshManagerApi;
     Widget layout = Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -56,7 +59,7 @@ class _ModuleState extends State<Module> {
         ],
       ),
     );
-    if (!isLoading) {
+    if (!nodes.isEmpty) {
       layout = ListView(
         children: <Widget>[
           TextButton(
@@ -73,7 +76,7 @@ class _ModuleState extends State<Module> {
                   MaterialPageRoute(
                     builder: (context) {
                       return Node(
-                        meshManagerApi: widget.meshManagerApi,
+                        meshManagerApi: meshManagerApi,
                         node: nodes[i],
                         name: nodes[i].uuid,
                       );
@@ -92,11 +95,13 @@ class _ModuleState extends State<Module> {
               ),
             ),
           const Divider(),
-          SendGenericLevel(meshManagerApi: widget.meshManagerApi),
-          SendGenericOnOff(meshManagerApi: widget.meshManagerApi),
-          SendConfigModelSubscriptionAdd(widget.meshManagerApi),
-          SendConfigModelPublicationAdd(widget.meshManagerApi),
-          SendDeprovisioning(meshManagerApi: widget.meshManagerApi),
+          SendGenericOnOff(meshManagerApi: meshManagerApi),
+          SendGenericLevel(meshManagerApi: meshManagerApi),
+          SendLightnessLevel(meshManagerApi: meshManagerApi),
+          SendHsl(meshManagerApi: meshManagerApi),
+          SendConfigModelSubscriptionAdd(meshManagerApi),
+          SendConfigModelPublicationAdd(meshManagerApi),
+          SendDeprovisioning(meshManagerApi: meshManagerApi),
         ],
       );
     }
@@ -104,10 +109,11 @@ class _ModuleState extends State<Module> {
   }
 
   Future<void> _init() async {
-    bleMeshManager.callbacks = DoozProvisionedBleMeshManagerCallbacks(widget.meshManagerApi, bleMeshManager);
+    final meshManagerApi = context.read<MeshManagerNotifier>().mesh.meshManagerApi;
+    bleMeshManager.callbacks = DoozProvisionedBleMeshManagerCallbacks(meshManagerApi, bleMeshManager);
     await bleMeshManager.connect(widget.device);
     // get nodes (ignore first node which is the default provisioner)
-    nodes = (await widget.meshManagerApi.meshNetwork!.nodes).skip(1).toList();
+    nodes = (await meshManagerApi.meshNetwork!.nodes).skip(1).toList();
     // will bind app keys (needed to be able to configure node)
     for (final node in nodes) {
       final elements = await node.elements;
@@ -119,7 +125,7 @@ class _ModuleState extends State<Module> {
             }
             final unicast = await node.unicastAddress;
             debugPrint('need to bind app key');
-            await widget.meshManagerApi.sendConfigModelAppBind(
+            await meshManagerApi.sendConfigModelAppBind(
               unicast,
               element.address,
               model.modelId,

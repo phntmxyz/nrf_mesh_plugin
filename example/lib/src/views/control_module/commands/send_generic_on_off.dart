@@ -14,7 +14,7 @@ class SendGenericOnOff extends StatefulWidget {
 }
 
 class _SendGenericOnOffState extends State<SendGenericOnOff> {
-  int? selectedElementAddress;
+  int? selectedElementAddress = 0xffff;
 
   bool onOff = false;
 

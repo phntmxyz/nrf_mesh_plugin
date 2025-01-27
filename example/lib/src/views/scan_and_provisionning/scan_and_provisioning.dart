@@ -12,10 +12,10 @@ class ScanningAndProvisioning extends StatefulWidget {
   final VoidCallback onGoToControl;
 
   const ScanningAndProvisioning({
-    Key? key,
+    super.key,
     required this.nordicNrfMesh,
     required this.onGoToControl,
-  }) : super(key: key);
+  });
 
   @override
   State<ScanningAndProvisioning> createState() => _ScanningAndProvisioningState();
@@ -84,7 +84,7 @@ class _ScanningAndProvisioningState extends State<ScanningAndProvisioning> {
     isProvisioning = true;
 
     try {
-      // Android is sending the mac Adress of the device, but Apple generates
+      // Android is sending the mac Address of the device, but Apple generates
       // an UUID specific by smartphone.
 
       String deviceUUID;
@@ -211,7 +211,7 @@ class ProvisioningDialog extends StatelessWidget {
                         stream: provisioningEvent.onConfigAppKeyStatus.map((event) => true),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

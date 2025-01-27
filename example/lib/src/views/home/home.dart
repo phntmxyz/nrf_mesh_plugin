@@ -130,13 +130,17 @@ class MeshNetworkDatabaseWidget extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () async {
-            final filePath = await FilePicker.platform.pickFiles(type: FileType.any);
-            if (filePath == null) return;
-            final file = File(filePath.paths.first!);
-            debugPrint('loading and importing json file...');
-            final json = await file.readAsString();
-            await meshManagerApi.importMeshNetworkJson(json);
-            debugPrint('done !');
+            try {
+              final filePath = await FilePicker.platform.pickFiles(type: FileType.any);
+              if (filePath == null) return;
+              final file = File(filePath.paths.first!);
+              debugPrint('loading and importing json file...');
+              final json = await file.readAsString();
+              await meshManagerApi.importMeshNetworkJson(json);
+              debugPrint('done !');
+            } catch (e) {
+              debugPrint('error loading mesh json: $e');
+            }
           },
           child: const Text('Import MeshNetwork (JSON)'),
         ),
