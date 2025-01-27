@@ -147,8 +147,8 @@ In a tab based layout, it provides example usage on :
  - scanning and provisioning a new node with some event based ui
  - scanning, connecting and sending messages to provisioned nodes
  # Related links
-- [Android-nRF-Mesh-Library] ([fork](https://github.com/OZEO-DOOZ/Android-nRF-Mesh-Library-1))
-- [iOS-nRF-Mesh-Library] ([fork](https://github.com/OZEO-DOOZ/IOS-nRF-Mesh-Library))
+- [Android-nRF-Mesh-Library] ([fork](https://github.com/NordicSemiconductor/Android-nRF-Mesh-Library))
+- [iOS-nRF-Mesh-Library] ([fork](https://github.com/NordicSemiconductor/IOS-nRF-Mesh-Library))
 - [Bluetooth Mesh Profile v1.0.1]
 - [flutter_reactive_ble]
 
