@@ -326,7 +326,7 @@ private extension DoozMeshManagerApi {
             break
         case .getSequenceNumberForAddress(let data):
             if
-                let _node = doozMeshNetwork?.meshNetwork.node(withAddress: Address(bitPattern: data.address)),
+                let _node = doozMeshNetwork?.meshNetwork.node(withAddress: Address(data.address)),
                 _node.elements.count == 1,
                 let element = _node.elements.first {
                 
@@ -341,7 +341,7 @@ private extension DoozMeshManagerApi {
             break
         case .setSequenceNumberForAddress(let data):
             if
-                let _node = doozMeshNetwork?.meshNetwork.node(withAddress: Address(bitPattern: data.address)),
+                let _node = doozMeshNetwork?.meshNetwork.node(withAddress: Address(data.address)),
                 _node.elements.count == 1,
                 let element = _node.elements.first {
                 meshNetworkManager.setSequenceNumber(data.sequenceNumber, forLocalElement: element)
@@ -510,7 +510,7 @@ private extension DoozMeshManagerApi {
             }
             let message: LightLightnessSet = LightLightnessSet(lightness: UInt16(data.lightness))
             do {
-                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(bitPattern: data.address)), using: appKey)
+                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(data.address)), using: appKey)
                 result(nil)
             } catch {
                 let nsError = error as NSError
@@ -526,7 +526,7 @@ private extension DoozMeshManagerApi {
             }
             let message = LightCTLSet(lightness: UInt16(data.lightness), temperature: UInt16(data.temperature), deltaUV: data.lightDeltaUV)
             do {
-                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(bitPattern: data.address)), using: appKey)
+                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(data.address)), using: appKey)
                 result(nil)
             } catch {
                 let nsError = error as NSError
@@ -542,7 +542,7 @@ private extension DoozMeshManagerApi {
             }
             let message = LightHSLSet(lightness: UInt16(data.lightness), hue: UInt16(data.hue), saturation: UInt16(data.saturation))
             do {
-                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(bitPattern: data.address)), using: appKey)
+                _ = try meshNetworkManager.send(message, to: MeshAddress(Address(data.address)), using: appKey)
                 result(nil)
             } catch {
                 let nsError = error as NSError

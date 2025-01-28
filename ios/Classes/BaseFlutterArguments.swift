@@ -21,14 +21,18 @@ protocol BaseFlutterArguments: Decodable{
 }
 
 extension BaseFlutterArguments{
-    
+
     init(_ arguments: FlutterCallArguments?) throws {
         guard let _arguments = arguments else{
             throw FlutterCallError.missingArguments
         }
         do{
-            self = try JSONDecoder().decode(Self.self, from: JSONSerialization.data(withJSONObject: _arguments))
+            print("arguments: \(_arguments)")
+            let jsonData = try JSONSerialization.data(withJSONObject: _arguments)
+            print("jsonData: \(String(data: jsonData, encoding: .utf8) ?? "nil")")
+            self = try JSONDecoder().decode(Self.self, from: jsonData)
         }catch{
+            print("Decoding error: \(error)")
             throw FlutterCallError.errorDecoding
         }
     }

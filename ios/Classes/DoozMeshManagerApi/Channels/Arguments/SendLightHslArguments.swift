@@ -6,9 +6,10 @@
 //
 
 struct SendLightHslArguments: BaseFlutterArguments {
-    let address: Int16
-    let lightness: Int
+    let address: UInt16
+    let lightness: UInt16
     let keyIndex: Int
-    let hue: Int
-    let saturation: Int16
+    let hue: UInt16
+    let saturation: UInt16
+    let sequenceNumber: Int
 }
