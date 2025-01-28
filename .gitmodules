@@ -1,6 +1,6 @@
 [submodule "Android-nRF-Mesh-Library"]
 	path = Android-nRF-Mesh-Library
-	url = https://github.com/NordicSemiconductor/Android-nRF-Mesh-Library.git
+	url = https://github.com/phntmxyz/Android-nRF-Mesh-Library.git
 [submodule "IOS-nRF-Mesh-Library"]
 	path = IOS-nRF-Mesh-Library
-	url = https://github.com/NordicSemiconductor/IOS-nRF-Mesh-Library.git
+	url = https://github.com/phntmxyz/IOS-nRF-Mesh-Library.git
