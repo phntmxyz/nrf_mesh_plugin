@@ -37,7 +37,7 @@ abstract class BleManager<E extends BleManagerCallbacks> {
   DiscoveredDevice? _device;
 
   /// A [bool] used to adapt the connection process
-  bool isProvisioningCompleted = false;
+  bool isProvisioningCompleted = true; // TODO Verify change
 
   /// The current MTU size (defaults to [maxPacketSize])
   int mtuSize = maxPacketSize;

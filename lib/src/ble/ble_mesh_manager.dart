@@ -35,7 +35,7 @@ class BleMeshManager<T extends BleMeshManagerCallbacks> extends BleManager<T> {
 
   /// A method to clear some resources when the device should be disconnected
   void _onDeviceDisconnected() async {
-    isProvisioningCompleted = false;
+    isProvisioningCompleted = true; // TODO Verify change
     await _meshProxyDataOutSubscription?.cancel();
     _meshProxyDataOutSubscription = null;
     await _meshProvisioningDataOutSubscription?.cancel();
@@ -67,9 +67,9 @@ class BleMeshManager<T extends BleMeshManagerCallbacks> extends BleManager<T> {
     // In the case of a mesh node, the advertised service should be either 0x1827 or 0x1828
     _discoveredServices = await bleInstance.discoverServices(device!.id);
     _log('services $_discoveredServices');
-    isProvisioningCompleted = false;
+    // isProvisioningCompleted = false; // TODO Verify change
     if (_hasExpectedService(meshProxyUuid)) {
-      isProvisioningCompleted = true;
+      // isProvisioningCompleted = true; // TODO Verify change
       // check for meshProxy characs
       final service = _discoveredServices.firstWhere((service) => service.serviceId == meshProxyUuid);
       if (_hasExpectedCharacteristicUuid(service, meshProxyDataIn) &&

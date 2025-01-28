@@ -252,6 +252,9 @@ Future<ProvisionedMeshNode> _provisioning(
     await bleMeshManager.disconnect();
     // auto retry connect to the target device
     _connectRetryCount = 0;
+
+    bleMeshManager.isProvisioningCompleted = false; // TODO Verify change
+
     isHandlingConnectErrors = true;
     await _connect(bleMeshManager, deviceToProvision);
     isHandlingConnectErrors = false;
@@ -285,6 +288,8 @@ Future<ProvisionedMeshNode> _provisioning(
       // unknown error that should be diagnosed (please file an issue)
       throw NrfMeshProvisioningException(ProvisioningFailureCode.unknown, '$e');
     }
+  } finally {
+    bleMeshManager.isProvisioningCompleted = true; // TODO Verify change
   }
 }
 
